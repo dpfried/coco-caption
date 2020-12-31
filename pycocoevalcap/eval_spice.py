@@ -6,12 +6,13 @@ from .tokenizer.ptbtokenizer import PTBTokenizer
 from .spice.spice import Spice
 
 class SpiceEval():
-    def __init__(self):
+    def __init__(self, threads=None):
         self.evalImgs = []
         self.eval = {}
         self.imgToEval = {}
-        self.spice = Spice()
-        self.tokenizer = PTBTokenizer()
+        self.threads = threads
+        self.spice = Spice(threads=threads)
+        self.tokenizer = PTBTokenizer(threads=threads)
 
     """
     The input have structure
@@ -68,7 +69,7 @@ class COCOEvalCapSpice:
         # Set up scorers
         # =================================================
         print('tokenization...')
-        tokenizer = PTBTokenizer()
+        tokenizer = PTBTokenizer(self.threads)
         gts  = tokenizer.tokenize(gts)
         res = tokenizer.tokenize(res)
 

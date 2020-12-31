@@ -27,10 +27,15 @@ PUNCTUATIONS = ["''", "'", "``", "`", "-LRB-", "-RRB-", "-LCB-", "-RCB-", \
 class PTBTokenizer:
     """Python wrapper of Stanford PTBTokenizer"""
 
+    def __init__(self, threads=None):
+        self.threads = threads
+
     def tokenize(self, captions_for_image):
         cmd = ['java', '-cp', STANFORD_CORENLP_3_4_1_JAR, \
                 'edu.stanford.nlp.process.PTBTokenizer', \
                 '-preserveLines', '-lowerCase']
+        if self.threads is not None:
+            cmd.extend(['-threads', str(self.threads)])
 
         # ======================================================
         # prepare data for PTB Tokenizer

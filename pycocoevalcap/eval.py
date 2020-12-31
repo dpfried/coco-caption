@@ -11,15 +11,16 @@ from .spice.spice import Spice
 from .wmd.wmd import WMD
 
 class COCOEvalCap:
-    def __init__(self, coco, cocoRes):
+    def __init__(self, coco, cocoRes, spice_threads=None):
         self.evalImgs = []
         self.eval = {}
         self.imgToEval = {}
         self.coco = coco
         self.cocoRes = cocoRes
         self.params = {'image_id': coco.getImgIds()}
+        self.spice_threads = spice_threads
 
-        self.Spice = Spice()
+        self.Spice = Spice(threads=spice_threads)
 
     def evaluate(self):
         imgIds = self.params['image_id']
@@ -34,7 +35,7 @@ class COCOEvalCap:
         # Set up scorers
         # =================================================
         print('tokenization...')
-        tokenizer = PTBTokenizer()
+        tokenizer = PTBTokenizer(threads=self.spice_threads)
         gts  = tokenizer.tokenize(gts)
         res = tokenizer.tokenize(res)
 

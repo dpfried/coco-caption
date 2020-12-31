@@ -23,12 +23,13 @@ class Spice:
     """
     Main Class to compute the SPICE metric 
     """
-    def __init__(self):
+    def __init__(self, threads=None):
         cwd = os.path.dirname(os.path.abspath(__file__))
         cache_dir=os.path.join(cwd, CACHE_DIR, str(time.time()))
         self.cache_dir = cache_dir
         if not os.path.exists(cache_dir):
           os.makedirs(cache_dir)
+        self.threads = threads
 
     def float_convert(self, obj):
         try:
@@ -75,6 +76,8 @@ class Spice:
           '-subset',
           '-silent'
         ]
+        if self.threads is not None:
+            spice_cmd.extend(['-threads', str(self.threads)])
         subprocess.check_call(spice_cmd, 
             cwd=os.path.dirname(os.path.abspath(__file__)))
 
